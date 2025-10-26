@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartVerify.AI - Fashion Tech Platform</title>
+    <style>
+        @font-face {
+            font-family: 'FKGroteskNeue';
+            src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2') format('woff2');
+        }
+
+        :root {
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+            
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-warning: var(--color-orange-500);
+            
+            --font-family-base: "FKGroteskNeue", "Inter", -apple-system, sans-serif;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+                --color-warning: var(--color-orange-400);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-teal-400) 100%);
+            color: white;
+            padding: var(--space-32) var(--space-24);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-12);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-32) var(--space-24);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: var(--space-8);
+            margin-bottom: var(--space-32);
+            border-bottom: 2px solid var(--color-border);
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: var(--space-12) var(--space-24);
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: var(--color-text);
+        }
+
+        .nav-tab.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: var(--space-24);
+            color: var(--color-text);
+        }
+
+        .card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-24);
+            margin-bottom: var(--space-24);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-24);
+            margin-bottom: var(--space-32);
+        }
+
+        .feature-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-24);
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-16);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-12);
+            color: var(--color-text);
+        }
+
+        .feature-card p {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-32);
+            text-align: center;
+            background: var(--color-secondary);
+            margin-bottom: var(--space-24);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--color-primary);
+            background: rgba(var(--color-teal-500-rgb), 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--color-primary);
+            background: rgba(var(--color-teal-500-rgb), 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-16);
+            color: var(--color-primary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: var(--space-12) var(--space-24);
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--color-secondary);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(var(--color-brown-600-rgb), 0.2);
+        }
+
+        .result-box {
+            padding: var(--space-20);
+            border-radius: var(--radius-base);
+            margin-top: var(--space-16);
+            border: 1px solid;
+        }
+
+        .result-authentic {
+            background: rgba(var(--color-teal-500-rgb), 0.1);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .result-counterfeit {
+            background: rgba(255, 84, 89, 0.1);
+            border-color: #ff5459;
+            color: #c0152f;
+        }
+
+        .result-box h4 {
+            font-size: 1.25rem;
+            margin-bottom: var(--space-8);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-16);
+            margin-top: var(--space-24);
+        }
+
+        .stat-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-base);
+            padding: var(--space-20);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: var(--space-8);
+        }
+
+        .stat-label {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: var(--space-20);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-8);
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--space-12);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            background: var(--color-surface);
+            color: var(--color-text);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(var(--color-teal-500-rgb), 0.1);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: var(--space-32);
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--color-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--space-24);
+            padding-left: var(--space-24);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            border: 3px solid var(--color-background);
+        }
+
+        .timeline-item h4 {
+            font-weight: 600;
+            margin-bottom: var(--space-8);
+            color: var(--color-text);
+        }
+
+        .timeline-item p {
+            color: var(--color-text-secondary);
+        }
+
+        .risk-meter {
+            height: 20px;
+            background: var(--color-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: var(--space-12);
+        }
+
+        .risk-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e 0%, #eab308 50%, #ef4444 100%);
+            transition: width 0.5s ease;
+        }
+
+        .qr-scanner {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            background: var(--color-secondary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: var(--space-24) auto;
+            border: 2px solid var(--color-border);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SmartVerify.AI</h1>
+        <p>AI-Powered Fashion Authentication &amp; Return Prediction Platform</p>
+    </div>
+
+    <div class="container">
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="overview">Overview</button>
+            <button class="nav-tab" data-tab="verify">AI Verification</button>
+            <button class="nav-tab" data-tab="returns">Return Predictor</button>
+            <button class="nav-tab" data-tab="supply">Supply Chain</button>
+            <button class="nav-tab" data-tab="impact">Impact</button>
+        </nav>
+
+        <!-- Overview Tab -->
+        <div class="tab-content active" id="overview">
+            <h2 class="section-title">The Fashion Industry Crisis</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>High Return Rates</h3>
+                    <p>1 in 3 online purchases returned due to size mismatch, quality issues, and dissatisfaction.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <h3>Counterfeit Products</h3>
+                    <p>Nearly 10% of sales are counterfeit, damaging brand trust and consumer confidence.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Supply Chain Opacity</h3>
+                    <p>Limited transparency creates consumer distrust and environmental waste.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="section-title">Our Solution</h2>
+                <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 1.8;">
+                    An AI-powered platform combining authenticity verification, return prediction, and supply chain transparency to transform fashion retail. We help brands reduce costs, build consumer trust, and create a more sustainable fashion ecosystem.
+                </p>
+            </div>
+
+            <h2 class="section-title">Core Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📸</div>
+                    <h3>AI Image Verification</h3>
+                    <p>Computer vision analysis of logos, stitching, and tags. Instant counterfeit detection with high accuracy.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Return Prediction Engine</h3>
+                    <p>Machine learning analyzes purchase patterns and product details to predict return probability.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Blockchain Traceability</h3>
+                    <p>NFC/QR tags linked to blockchain records enable full product journey transparency.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Verification Tab -->
+        <div class="tab-content" id="verify">
+            <h2 class="section-title">AI Image Verification</h2>
+            
+            <div class="card">
+                <h3 style="margin-bottom: var(--space-16);">Upload Product Image</h3>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📷</div>
+                    <p style="font-size: 1.1rem; margin-bottom: var(--space-8);"><strong>Click to upload or drag and drop</strong></p>
+                    <p style="color: var(--color-text-secondary);">Upload a photo of the product for instant verification</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <button class="btn" id="verifyBtn" style="display: none;">Verify Authenticity</button>
+                
+                <div id="verificationResult" class="hidden"></div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: var(--space-16);">How It Works</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>1. Capture Image</h4>
+                        <p>Users photograph products using the mobile app or upload existing images.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>2. AI Analysis</h4>
+                        <p>CNN model compares logos, stitching patterns, and tags against brand-verified database.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>3. Instant Detection</h4>
+                        <p>Counterfeit products identified with high accuracy in seconds.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>4. Detailed Report</h4>
+                        <p>Comprehensive authenticity report with confidence scores and verification details.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Return Prediction Tab -->
+        <div class="tab-content" id="returns">
+            <h2 class="section-title">Return Prediction Engine</h2>
+            
+            <div class="card">
+                <h3 style="margin-bottom: var(--space-16);">Predict Return Risk</h3>
+                <form id="returnForm">
+                    <div class="form-group">
+                        <label class="form-label">Product Category</label>
+                        <select class="form-control" id="category">
+                            <option value="">Select category</option>
+                            <option value="apparel">Apparel</option>
+                            <option value="footwear">Footwear</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="jewelry">Jewelry</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Customer Purchase History</label>
+                        <select class="form-control" id="history">
+                            <option value="">Select history</option>
+                            <option value="new">New Customer (0-2 orders)</option>
+                            <option value="regular">Regular (3-10 orders)</option>
+                            <option value="loyal">Loyal (10+ orders)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Previous Return Rate</label>
+                        <select class="form-control" id="returnRate">
+                            <option value="">Select rate</option>
+                            <option value="low">Low (0-15%)</option>
+                            <option value="medium">Medium (15-30%)</option>
+                            <option value="high">High (30%+)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Product Price Range</label>
+                        <select class="form-control" id="price">
+                            <option value="">Select range</option>
+                            <option value="budget">Budget (&lt;$50)</option>
+                            <option value="mid">Mid-range ($50-$200)</option>
+                            <option value="premium">Premium ($200+)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn">Calculate Return Risk</button>
+                </form>
+                
+                <div id="riskResult" class="hidden" style="margin-top: var(--space-24);">
+                    <h4 style="margin-bottom: var(--space-16);">Return Risk Analysis</h4>
+                    <div class="risk-meter">
+                        <div class="risk-fill" id="riskFill" style="width: 0%"></div>
+                    </div>
+                    <p id="riskText" style="margin-top: var(--space-12); font-size: 1.1rem; font-weight: 500;"></p>
+                    <p id="riskRecommendation" style="margin-top: var(--space-12); color: var(--color-text-secondary);"></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: var(--space-16);">Analysis Factors</h3>
+                <div class="feature-grid">
+                    <div>
+                        <h4 style="margin-bottom: var(--space-8);">Customer Behavior</h4>
+                        <ul style="color: var(--color-text-secondary); padding-left: var(--space-20);">
+                            <li>Purchase patterns and frequency</li>
+                            <li>Historical return rates</li>
+                            <li>Product preferences</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: var(--space-8);">Product Analysis</h4>
+                        <ul style="color: var(--color-text-secondary); padding-left: var(--space-20);">
+                            <li>Size and fit accuracy</li>
+                            <li>Material quality indicators</li>
+                            <li>Category-specific risk factors</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: var(--space-8);">Predictive Insights</h4>
+                        <ul style="color: var(--color-text-secondary); padding-left: var(--space-20);">
+                            <li>Return probability scoring</li>
+                            <li>Inventory optimization</li>
+                            <li>Marketing decision guidance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supply Chain Tab -->
+        <div class="tab-content" id="supply">
+            <h2 class="section-title">Supply Chain Transparency</h2>
+            
+            <div class="card">
+                <h3 style="margin-bottom: var(--space-16);">Scan Product Tag</h3>
+                <p style="color: var(--color-text-secondary); margin-bottom: var(--space-24);">
+                    Each product includes an NFC/QR tag linked to blockchain records. Scan to trace the complete journey from factory to store.
+                </p>
+                
+                <div class="qr-scanner">
+                    <div style="text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: var(--space-16);">📱</div>
+                        <p style="color: var(--color-text-secondary);">QR/NFC Scanner</p>
+                        <button class="btn" id="scanBtn" style="margin-top: var(--space-16);">Simulate Scan</button>
+                    </div>
+                </div>
+                
+                <div id="supplyChainResult" class="hidden">
+                    <h4 style="margin-bottom: var(--space-16); font-size: 1.25rem;">Product Journey</h4>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>Manufacturing</h4>
+                            <p><strong>Location:</strong> Textile Factory, Bangladesh</p>
+                            <p><strong>Date:</strong> March 15, 2025</p>
+                            <p>Certified organic cotton, fair trade verified</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Quality Inspection</h4>
+                            <p><strong>Location:</strong> Quality Control Center, Dhaka</p>
+                            <p><strong>Date:</strong> March 20, 2025</p>
+                            <p>All quality standards met, batch approved</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Logistics</h4>
+                            <p><strong>Route:</strong> Bangladesh → India</p>
+                            <p><strong>Date:</strong> March 25, 2025</p>
+                            <p>Carbon-neutral shipping, tracking ID: SV2025-4892</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Retail Distribution</h4>
+                            <p><strong>Location:</strong> Fashion Retail Store, Mumbai</p>
+                            <p><strong>Date:</strong> April 2, 2025</p>
+                            <p>Available for purchase, full warranty active</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid" style="margin-top: var(--space-32);">
+                        <div class="stat-card">
+                            <div class="stat-value">✓</div>
+                            <div class="stat-label">Authenticity Verified</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Checkpoints</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">🌱</div>
+                            <div class="stat-label">Sustainable</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impact Tab -->
+        <div class="tab-content" id="impact">
+            <h2 class="section-title">Platform Impact</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">35%</div>
+                    <div class="stat-label">Return Reduction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">95%</div>
+                    <div class="stat-label">Detection Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">60%</div>
+                    <div class="stat-label">Consumer Trust Increase</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$2M+</div>
+                    <div class="stat-label">Saved Annually</div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: var(--space-32);">
+                <h3 style="margin-bottom: var(--space-16);">Future Enhancements</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🥽</div>
+                        <h3>AI Virtual Try-On</h3>
+                        <p>Minimize sizing issues with augmented reality fitting technology.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h3>Federated Learning</h3>
+                        <p>Cross-brand model collaboration without compromising data privacy.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🌍</div>
+                        <h3>Sustainability Dashboard</h3>
+                        <p>Track eco-impact and environmental footprint of each purchase.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: var(--space-32); background: linear-gradient(135deg, rgba(var(--color-teal-500-rgb), 0.1) 0%, rgba(var(--color-teal-500-rgb), 0.05) 100%); border-color: var(--color-primary);">
+                <h2 style="margin-bottom: var(--space-16);">Making Fashion Smarter</h2>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--color-text);">
+                    <strong>SmartVerify.AI</strong> uses artificial intelligence to verify authenticity, predict returns, and trace product journeys. We boost trust, cut waste, and save millions for brands. Making fashion smarter, transparent, and sustainable.
+                </p>
+                <div style="margin-top: var(--space-24); display: flex; gap: var(--space-16); flex-wrap: wrap;">
+                    <button class="btn">Learn More</button>
+                    <button class="btn btn-secondary">Contact Us</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab navigation
+        const tabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        // AI Verification Upload
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const verificationResult = document.getElementById('verificationResult');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                uploadArea.innerHTML = `
+                    <div class="upload-icon">✓</div>
+                    <p style="font-size: 1.1rem; margin-bottom: var(--space-8);"><strong>Image Uploaded</strong></p>
+                    <p style="color: var(--color-text-secondary);">${file.name}</p>
+                `;
+                verifyBtn.style.display = 'inline-block';
+            }
+        }
+
+        verifyBtn.addEventListener('click', () => {
+            verifyBtn.textContent = 'Analyzing...';
+            verifyBtn.disabled = true;
+            
+            setTimeout(() => {
+                const isAuthentic = Math.random() > 0.3;
+                const confidence = Math.floor(Math.random() * 15) + 85;
+                
+                verificationResult.className = isAuthentic ? 'result-box result-authentic' : 'result-box result-counterfeit';
+                verificationResult.innerHTML = `
+                    <h4>${isAuthentic ? '✓ Authentic Product' : '⚠ Potential Counterfeit'}</h4>
+                    <p><strong>Confidence Score:</strong> ${confidence}%</p>
+                    <p style="margin-top: var(--space-12); color: var(--color-text-secondary);">
+                        ${isAuthentic 
+                            ? 'All verification checks passed. Product matches brand-verified database.'
+                            : 'Irregularities detected in logo stitching and material quality. Further verification recommended.'}
+                    </p>
+                `;
+                verificationResult.classList.remove('hidden');
+                verifyBtn.textContent = 'Verify Another';
+                verifyBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Return Prediction Form
+        const returnForm = document.getElementById('returnForm');
+        const riskResult = document.getElementById('riskResult');
+        const riskFill = document.getElementById('riskFill');
+        const riskText = document.getElementById('riskText');
+        const riskRecommendation = document.getElementById('riskRecommendation');
+
+        returnForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const category = document.getElementById('category').value;
+            const history = document.getElementById('history').value;
+            const returnRate = document.getElementById('returnRate').value;
+            const price = document.getElementById('price').value;
+            
+            if (!category || !history || !returnRate || !price) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            let riskScore = 0;
+            
+            if (returnRate === 'high') riskScore += 40;
+            else if (returnRate === 'medium') riskScore += 25;
+            else riskScore += 10;
+            
+            if (history === 'new') riskScore += 25;
+            else if (history === 'regular') riskScore += 10;
+            else riskScore += 5;
+            
+            if (category === 'apparel') riskScore += 20;
+            else if (category === 'footwear') riskScore += 15;
+            else riskScore += 10;
+            
+            if (price === 'budget') riskScore += 10;
+            else if (price === 'premium') riskScore += 5;
+            
+            riskScore = Math.min(riskScore, 95);
+            
+            riskFill.style.width = riskScore + '%';
+            
+            let riskLevel, color, recommendation;
+            if (riskScore < 30) {
+                riskLevel = 'Low Risk';
+                color = '#22c55e';
+                recommendation = 'This order has a low probability of return. Standard processing recommended.';
+            } else if (riskScore < 60) {
+                riskLevel = 'Medium Risk';
+                color = '#eab308';
+                recommendation = 'Moderate return risk. Consider providing additional product information and size guidance.';
+            } else {
+                riskLevel = 'High Risk';
+                color = '#ef4444';
+                recommendation = 'High return probability. Recommend detailed product consultation and accurate size recommendations.';
+            }
+            
+            riskText.textContent = `${riskLevel}: ${riskScore}% Return Probability`;
+            riskText.style.color = color;
+            riskRecommendation.textContent = recommendation;
+            
+            riskResult.classList.remove('hidden');
+            riskResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        // Supply Chain Scanner
+        const scanBtn = document.getElementById('scanBtn');
+        const supplyChainResult = document.getElementById('supplyChainResult');
+
+        scanBtn.addEventListener('click', () => {
+            scanBtn.textContent = 'Scanning...';
+            scanBtn.disabled = true;
+            
+            setTimeout(() => {
+                supplyChainResult.classList.remove('hidden');
+                supplyChainResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                scanBtn.textContent = 'Scan Another Product';
+                scanBtn.disabled = false;
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
